@@ -1,0 +1,6 @@
+.DS_Store
+__MACOSX/
+regularidadnav-backend/.env
+regularidadnav-backend/__pycache__/
+regularidadnav-backend/app/__pycache__/
+*.pyc

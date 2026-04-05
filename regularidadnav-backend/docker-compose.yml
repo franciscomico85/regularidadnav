@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-regularidadnav}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-regularidadnav}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-regularidadnav}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: ./app
+    container_name: regularidadnav-api
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-regularidadnav}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-regularidadnav}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
+      - nginx-net
+
+volumes:
+  pgdata:
+
+networks:
+  nginx-net:
+    external: true
+    name: nginx-net
