@@ -566,7 +566,7 @@ function goPrestart(){
   G.boat=v.toUpperCase();G.wps=buildWPs();
   el('psName').textContent=G.boat;el('psSpd').textContent=G.spd;
   el('psSal').textContent=route[0].n;el('psCoord').textContent=route[0].lat.toFixed(4)+'°N · '+route[0].lng.toFixed(4)+'°E';
-  API_KEY=(el('iKey').value.trim()||'').toUpperCase();
+  API_KEY='';
   if(API_KEY){apiCall('POST','/barcos',{nombre:G.boat,velocidad_declarada:G.spd}).then(function(r){if(r&&r.id){API_BARCO_ID=r.id;apiConnect()}})}
   startGPS();go(2);
 }
